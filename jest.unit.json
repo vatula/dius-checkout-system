@@ -1,0 +1,27 @@
+{
+  "automock": false,
+  "testEnvironment": "node",
+  "roots": [
+    "<rootDir>/test/"
+  ],
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "moduleFileExtensions": [
+    "ts",
+    "js",
+    "json"
+  ],
+  "testRegex": ".+-spec\\.ts$",
+  "collectCoverage": true,
+  "coverageThreshold": {
+    "global": {
+      "branches": 38,
+      "functions": 31,
+      "lines": 42,
+      "statements": 43
+    }
+  },
+  "cacheDirectory": "<rootDir>/.jest/unit",
+  "collectCoverageFrom" : ["**/*.ts", "!**/@types/**", "!**/node_modules/**"]
+}
