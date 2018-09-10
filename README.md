@@ -18,26 +18,36 @@ Ultimately this does not change the total. But this trait is important to know n
 The rules system is a map from scanned SKUs to a new list of pairs (SKU, price).
 The processing of the rule application is as follows. Suppose those are the default prices.
 
+```
 sku1: price1
 sku2: price2
 sku3: price3
+```
 
 the default prices are described as a pricing rule
 rule1:
+```
   if (sku == sku1) then (sku1, price1)
   if (sku == sku2) then (sku2, price2)
   if (sku == sku3) then (sku3, price3)
+```
 
 and assuming the other three rules added
 
 rule2:
+```
   if (sku == sku1) then (sku1, 0) else (sku, MAX_INTEGER)
+```
 
 rule3:
+```
   if (sku == sku1) then (sku1, 10) else (sku, MAX_INTEGER)
+```
 
 rule4:
+```
   if (sku == sku3) then (sku3, 0) else (sku, MAX_INTEGER)
+```
 
 let scanned items be:
 
