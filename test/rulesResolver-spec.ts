@@ -1,5 +1,5 @@
 import {IPricingRule} from '../src/pricingRule';
-import {DefaultPricingRule} from '../src/rules/default';
+import {DefaultPricingRule} from '../src/rules';
 import {RulesResolver} from '../src/rulesResolver';
 
 describe('RulesResolver', () => {
@@ -107,6 +107,17 @@ describe('RulesResolver', () => {
       rulesResolver.add(defaultPricesRule, zeroPricesRule, defaultPricesRule);
       expect(rulesResolver.getPricelistMatrix(['ipd', 'vga'])).toEqual([['ipd', [549.99, 0, 549.99]], ['vga', [30 ,0, 30]]]);
     });
+
+    it('should throw on the first invalid price', () => {
+      class RulesResolverThrows extends RulesResolverTest {
+        public static isValidPrice(_price: number): boolean {
+          return false;
+        }
+      }
+      const rulesResolver = new RulesResolverThrows();
+      rulesResolver.add(defaultPricesRule, zeroPricesRule, defaultPricesRule);
+      expect(() => rulesResolver.getPricelistMatrix(['ipd', 'vga'])).toThrow('price for the rule # 1 is invalid (the value is 549.99). It needs to be between 0 and 9007199254740991');
+    });
   });
 
   describe('add', () => {
@@ -119,6 +130,28 @@ describe('RulesResolver', () => {
       const rulesResolver = new RulesResolver();
       rulesResolver.add(zeroPricesRule);
       expect(rulesResolver.apply(['ipd', 'vga'])).toEqual([['ipd', 0], ['vga', 0]]);
+    });
+  });
+
+  describe('isValidPrice', () => {
+    class RulesResolverTest extends RulesResolver {
+      public static isValidPrice(price: number): boolean {
+        return RulesResolver.isValidPrice(price);
+      }
+    }
+
+    it('should return false for any price value that is not in the range of 0 to MAX_SAFE_INTEGER', () => {
+      expect(RulesResolverTest.isValidPrice({} as any)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(undefined as any)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(null)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(NaN)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(-1)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(Number.MAX_VALUE)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(Number.NEGATIVE_INFINITY)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(Number.POSITIVE_INFINITY)).toEqual(false);
+      expect(RulesResolverTest.isValidPrice(0)).toEqual(true);
+      expect(RulesResolverTest.isValidPrice(1)).toEqual(true);
+      expect(RulesResolverTest.isValidPrice(Number.MAX_SAFE_INTEGER)).toEqual(true);
     });
   });
 });

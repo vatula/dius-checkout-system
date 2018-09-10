@@ -1,8 +1,6 @@
-import {Checkout} from '../src/checkout';
-import {BulkDiscountIPD5} from '../src/rules/bulkDiscountIPD5';
-import {DefaultPricingRule} from '../src/rules/default';
-import {FreeVGAForEachMBP} from '../src/rules/freeVGAForEachMBP';
-import {ThreeForTwoATV} from '../src/rules/threeForTwoATV';
+import {Checkout} from '../src';
+import {ThreeForTwoATV, FreeVGAForEachMBP, DefaultPricingRule, BulkDiscountIPD5} from '../src/rules';
+
 
 describe('Checkout', () => {
 

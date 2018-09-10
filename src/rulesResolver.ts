@@ -20,6 +20,9 @@ export class RulesResolver implements IPricingRule {
     const normalizedMatrix: Array<[string, Array<number>]> = [];
     pricelistMatrix.forEach((pricelist, ruleNum) => {
       pricelist.forEach(([sku, price], index) => {
+        if (!(this.constructor as typeof RulesResolver).isValidPrice(price)) {
+          throw new Error(`price for the rule # ${ruleNum + 1} is invalid (the value is ${price}). It needs to be between 0 and ${Number.MAX_SAFE_INTEGER}`);
+        }
         if (!normalizedMatrix[index]) {
           const prices = new Array(pricelistMatrix.length).fill(Number.MAX_SAFE_INTEGER);
           prices[ruleNum] = price;
@@ -35,5 +38,9 @@ export class RulesResolver implements IPricingRule {
       });
     });
     return normalizedMatrix;
+  }
+
+  protected static isValidPrice(price: number): boolean {
+    return (typeof price === 'number' && price >= 0 && Number.isSafeInteger(Math.ceil(price)));
   }
 }
