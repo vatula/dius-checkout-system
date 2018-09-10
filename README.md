@@ -1,4 +1,4 @@
-# dius-checkout-system
+# dius-checkout-system [![Build Status](https://travis-ci.com/vatula/dius-checkout-system.svg?branch=master)](https://travis-ci.com/vatula/dius-checkout-system)
 
 run `npm i`
 
